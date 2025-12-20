@@ -30,6 +30,7 @@ export default function LoginPage() {
   const handleSignUp = async (email: string, password: string) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    console.log("サインアップ成功:", userCredential.user);
     toast.success("新規登録できました！");
     router.push("/login");
   } catch (error) {
