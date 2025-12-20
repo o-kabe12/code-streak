@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { signInWithEmailAndPassword} from "firebase/auth";
+import {createUserWithEmailAndPassword} from "firebase/auth";
 
 import toast from "react-hot-toast";
 
@@ -27,24 +27,24 @@ export default function LoginPage() {
 
   const router = useRouter();
 
-  const handleLogin = async (email: string, password: string) => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      toast.success("おかえりなさい！");
-      router.push("/");
-    } catch (error) {
-      console.error("ログイン失敗:", error.message);
-      toast.error(getErrorMessage(error.code));
-    }
-  };
+  const handleSignUp = async (email: string, password: string) => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    toast.success("新規登録できました！");
+    router.push("/login");
+  } catch (error) {
+    console.error("エラー:", error.message);
+    toast.error(getErrorMessage(error.code));
+  }
+};
   
   return (
     <div className="min-h-[90vh] flex flex-col justify-center items-center gap-6">
-      <h1 className="text-2xl font-bold text-center">ログイン</h1>
+      <h1 className="text-2xl font-bold text-center">サインアップ</h1>
       <form className="w-full md:w-[600px] mx-auto py-10 px-6 shadow-md rounded-md border border-gray-200"
         onSubmit={(e) => {
           e.preventDefault();
-          handleLogin(email, password);
+          handleSignUp(email, password);
         }}
       >
         <div className="mb-4">
@@ -77,10 +77,10 @@ export default function LoginPage() {
           type="submit"
           className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300"
         >
-          ログイン
+          サインアップ
         </button>
         <p className="mt-6 text-center">
-          <Link href="/signup" className="text-indigo-600 hover:opacity-70 transition duration-300">新規登録</Link>
+          <Link href="/login" className="text-indigo-600 hover:opacity-70 transition duration-300">ログイン</Link>
           はこちら
         </p>
       </form>
